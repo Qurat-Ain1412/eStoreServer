@@ -46,18 +46,6 @@ const deleteProduct = async(id) => {
     }
 }
 
-// const updateProduct = async(id, updatedData) => {
-//     try {
-//         const product = await Product.findByIdAndUpdate(req.params.id);
-//         if(!product) {
-//             throw new Error('Product not found');
-//         }
-        
-//     } catch (error) {
-
-//     }
-// }
-
 
 const updateProduct = async (id, updateData) => {
     try {
@@ -65,8 +53,8 @@ const updateProduct = async (id, updateData) => {
             id,
             updateData,
             { 
-                new: true,                // Return the updated document
-                runValidators: true       // Run model validations on update
+                new: true,                
+                runValidators: true       
             }
         );
 
