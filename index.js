@@ -5,12 +5,26 @@ const mongoose = require("mongoose");
 const productRoutes = require('./routes/product.routes');
 // const getProductsRoutes = require('./routes/product.routes')
 
+
+const bodyParser = require('body-parser');
+
 const app = express();
+
+// 🛠 Increase body size limit (e.g., 10MB)
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+
+app.use(cors());
+// const app = express();
+app.use('/uploads', express.static('uploads'));
 // app.use(cors());
 app.use(cors({
   origin: 'http://localhost:4200'
+  // origin: 'http://localhost:4200' (or)
+  // origin: '*'
 }));
 app.use(express.json());
+
 const PORT = 3000;
 
 // Database connection
