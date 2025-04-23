@@ -5,7 +5,7 @@ const createProduct = async(productData) => {
         const product = await Product.create(productData);
         return product;
     } catch (error) {
-        throw new error(error.message);
+        throw new Error(error.message);
     }
 
 };
@@ -16,7 +16,7 @@ const getProducts = async() => {
         const products = await Product.find({});
         return products;
     } catch (error) {
-        throw new error(error.message);
+        throw new Error(error.message);
     }
 }
 
