@@ -1,7 +1,9 @@
 const userService = require("../services/user.service.js");
 const cloudinary = require("../utils/cloudinary.js");
 const User = require("../models/userSchema.model.js");
+const bcrypt = require("bcrypt");
 const fs = require("fs");
+const jwt = require("jsonwebtoken"); 
 
 const createUser = async (req, res) => {
   try {
@@ -12,9 +14,11 @@ const createUser = async (req, res) => {
       folder: "users",
     });
     console.log("url:", result);
+    const hashPassword = await bcrypt.hash(req.body.password, 10);
     const user = await User.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
+      password: hashPassword,
       email: req.body.email,
       phone: req.body.phone,
       userImage: result.secure_url,
@@ -34,6 +38,29 @@ const createUser = async (req, res) => {
     });
   }
 };
+
+//login functionality
+const loginUser = async (req, res) => {
+  const user = await User.findOne({email: req.body.email});
+  if(!user) {
+    return null;
+  }
+  const isMatched = await bcrypt.compare(req.body.password, user.password);
+  if(isMatched) {
+    const token = jwt.sign({
+      id: user._id, 
+      name: user.name, 
+      email: user.email
+    }, "mySecretToken", 
+  {
+    expiresIn: "1h"
+  });
+  return{ token, user};
+
+  } else {
+    return null;
+  }
+}
 
 const getUsers = async (req, res) => {
   try {
@@ -69,6 +96,7 @@ const updateUser = async (req, res) => {
     const updateData = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
+      // password: req.body.
       email: req.body.email,
       phone: req.body.phone,
       userImage: result.secure_url,
@@ -98,6 +126,7 @@ const updateUser = async (req, res) => {
 
 module.exports = {
   createUser,
+  loginUser,
   getUser,
   getUsers,
   deleteUser,

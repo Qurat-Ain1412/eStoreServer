@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const productRoutes = require("./routes/product.routes");
 const userRoutes = require("./routes/user.routes.js");
 const bodyParser = require("body-parser");
-
+const authRoutes = require("./routes/auth.js");
 const app = express();
 
 // Increase body size limit (e.g., 10MB)
@@ -34,7 +34,7 @@ mongoose
 // Routes
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
-
+app.use("/auth", authRoutes);
 //Test Route
 app.get("/", (req, res) => {
   res.json({
